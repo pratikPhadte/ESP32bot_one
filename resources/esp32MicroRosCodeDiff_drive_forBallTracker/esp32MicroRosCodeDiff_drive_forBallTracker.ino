@@ -83,7 +83,7 @@ void subscription_callback2(const void *msgin) {
   float angular = msg->angular.z;
    analogWrite(ENA,speed);
    analogWrite(ENB,speed);
-if (linear > 0) {
+if (linear > 0 && abs(angular) < 4) {
   digitalWrite(IN1, HIGH);
   digitalWrite(IN2, LOW);
   digitalWrite(IN3, HIGH);
@@ -95,16 +95,16 @@ if (linear > 0) {
   digitalWrite(IN4, HIGH);
 }
   // Set right motor direction and speed
-  if (angular > 0) {  //turn left
-   analogWrite(ENA,speed);
-   analogWrite(ENB,speed);
+  if (angular > 4) {  //turn left
+   analogWrite(ENA,speed-40);
+   analogWrite(ENB,speed-40);
   digitalWrite(IN1, HIGH);
   digitalWrite(IN2, LOW);
   digitalWrite(IN3, LOW);
   digitalWrite(IN4, LOW);
-  } else if (angular < 0 ) {  // turn right
-    analogWrite(ENA,speed);
-   analogWrite(ENB,speed);
+  } else if (angular < -4 ) {  // turn right
+    analogWrite(ENA,speed-40);
+   analogWrite(ENB,speed-40);
   digitalWrite(IN1, LOW);
   digitalWrite(IN2, LOW);
   digitalWrite(IN3, HIGH);
@@ -139,7 +139,7 @@ void setup() {
    digitalWrite(IN4, LOW);
   digitalWrite(LED_PIN, HIGH);
 
-  speed = 210;
+  speed = 230;
   delay(2000);
 
   allocator = rcl_get_default_allocator();
